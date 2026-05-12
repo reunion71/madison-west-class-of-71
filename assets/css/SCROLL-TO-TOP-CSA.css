@@ -1,0 +1,58 @@
+.scroll-top-wrapper:hover {
+  background-color: #e6e6e6;
+}
+
+.scroll-top-wrapper i.fa {
+  line-height: inherit;
+}
+
+.scroll-top-wrapper {
+  position: fixed;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+  text-align: center;
+  z-index: 99999999;
+  background-color: #d0d0d0;
+  color: #ffffff;
+  width: 50px;
+  height: 48px;
+  line-height: 48px;
+  right: 30px;
+  bottom: 30px;
+  padding-top: 2px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+
+.scroll-top-wrapper:hover {
+  background-color: #e6e6e6;
+}
+
+.scroll-top-wrapper i.fa {
+  line-height: inherit;
+}
+
+* {
+  -webkit-border-radius: 0 0 0 0;
+  border-radius: 0 0 0 0;
+  font-family: 'Dancing Script';
+  /*color: #406286 !important;*/
+}
+
+* {
+  /*box-sizing: border-box;*/
+  /*-moz-box-sizing: border-box;*/
+}
+
+* {
+  /*box-sizing: border-box;*/
+}
+

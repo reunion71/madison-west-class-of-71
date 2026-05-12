@@ -1,0 +1,44 @@
+.tutorial-container {
+  background-color: #ccc;
+  padding: 10px;
+}
+
+.tutorial-item {
+  background-color: #f1425d;
+  padding: 0px;
+  /*margin: 30px;*/
+  font-size: 40px;
+  width: 100px;
+}
+
+.tutorial-item-grow {
+  background-color: #f1425d;
+  padding: 0px;
+  /*margin: 30px;*/
+  font-size: 40px;
+  width: 100px;
+  /*flex-grow: 1;*/
+  flex: 1;
+}
+
+.tutorial-text {
+  font-size: 40px;
+  color: #fff;
+  text-align: center;
+}
+
+.flex-properties {
+  background-color: rgba(152,27,27,0.16);
+  height: 200px;
+  flex-basis: 300px;
+  flex-shrink: 0;
+}
+
+.flex-properties-shorthand {
+  background-color: rgba(152,27,27,0.16);
+  height: 200px;
+  /*flex-basis: 322px;*/
+  /*flex-shrink: 0;*/
+  flex: 1 0 364px;
+}
+
