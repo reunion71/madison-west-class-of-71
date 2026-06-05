@@ -39,10 +39,6 @@ html * {
   padding: 1.5rem !important;
 }
 
-.custom-paragraph {
-  margin-bottom: 0.3rem;
-}
-
 img, svg {
   vertical-align: top;
 }
