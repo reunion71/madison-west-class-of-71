@@ -204,3 +204,22 @@ body {
   display: none;
 }
 
+#find-classmates {
+  height: 14%;
+  overflow-y: scroll !important;
+  /*min-height: 0;*/
+  /*touch-action: pan-y;*/
+  /*-webkit-overflow-scrolling: touch;*/
+}
+
+custom-tsble-cell {
+}
+
+.custom-table-cell {
+  font-size: 15px;
+}
+
+.custom-table-cell-classmates {
+  font-size: 12px;
+}
+
