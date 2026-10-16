@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>1971 Yearbook — Part 4</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #fff;
+      color: #2d3a90;
+      font-family: Arial, sans-serif;
+    }
+
+    #yearbook-navigation {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 12px;
+      border-bottom: 4px solid #ffc107;
+      background: #2d3a90;
+      color: #fff;
+    }
+
+    #yearbook-navigation span {
+      font-weight: 600;
+    }
+
+    #yearbook-navigation span[aria-disabled="true"] {
+      color: #fff;
+      font-weight: 400;
+      opacity: 0.65;
+    }
+
+    #yearbook-navigation a {
+      padding: 9px 16px;
+      border-radius: 6px;
+      background: #ffc107;
+      color: #2d3a90;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background-color 150ms ease;
+    }
+
+    #yearbook-navigation a:hover {
+      background: #ffca2c;
+    }
+
+    #yearbook-navigation a:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 3px;
+    }
+
+    #yearbook-direct-link {
+      margin: 16px 12px;
+      text-align: center;
+    }
+
+    #yearbook-direct-link a {
+      color: #2d3a90;
+      font-size: 0.95rem;
+      text-underline-offset: 3px;
+    }
+
+    #yearbook-direct-link a:hover {
+      text-decoration-thickness: 2px;
+    }
+
+    #yearbook-direct-link a:focus-visible {
+      outline: 3px solid #2d3a90;
+      outline-offset: 3px;
+    }
+
+    #yearbook-search-help {
+      margin: 12px;
+      padding: 12px 16px;
+      border-radius: 6px;
+      background: #f2f3fa;
+      color: #2d3a90;
+      text-align: center;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    #yearbook-search-help kbd {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #2d3a90;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.9em;
+    }
+
+    #yearbook-viewer {
+      display: block;
+      width: 100%;
+      height: 85vh;
+      border: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #yearbook-navigation a {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav id="yearbook-navigation" aria-label="Yearbook parts">
+    <a href="yearbook-3.html">← Previous part</a>
+    <span>Part 4 of 4</span>
+    <span aria-disabled="true">Next part →</span>
+  </nav>
+
+  <p id="yearbook-direct-link">
+    <a
+      href="assets/pdfs/yearbook-part-04.pdf"
+      target="_blank"
+      rel="noopener"
+    >
+      Open this PDF in a new tab
+    </a>
+  </p>
+
+  <p id="yearbook-search-help">
+    Search this part: click inside the PDF, then press
+    <kbd>Ctrl</kbd> + <kbd>F</kbd> (Windows) or
+    <kbd>Command</kbd> + <kbd>F</kbd> (Mac).
+  </p>
+
+  <iframe
+    id="yearbook-viewer"
+    src="assets/pdfs/yearbook-part-04.pdf"
+    title="1971 Yearbook — Part 4"
+  ></iframe>
+</body>
+</html>
