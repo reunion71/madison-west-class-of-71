@@ -30,6 +30,11 @@
       font-weight: 600;
     }
 
+    #yearbook-navigation span[aria-disabled="true"] {
+      font-weight: 400;
+      opacity: 0.65;
+    }
+
     #yearbook-navigation a {
       padding: 9px 16px;
       border-radius: 6px;
@@ -40,7 +45,8 @@
       transition: background-color 150ms ease;
     }
 
-    #yearbook-navigation a:hover {
+    #yearbook-navigation a:hover,
+    .mobile-pdf-button:hover {
       background: #ffca2c;
     }
 
@@ -49,13 +55,12 @@
       outline-offset: 3px;
     }
 
-    /* Mobile button and information */
     #yearbook-direct-link {
       margin: 24px 12px;
       text-align: center;
     }
 
-    #yearbook-direct-link .mobile-pdf-button {
+    .mobile-pdf-button {
       display: inline-block;
       padding: 12px 20px;
       border-radius: 6px;
@@ -64,10 +69,6 @@
       font-size: 1rem;
       font-weight: 700;
       text-decoration: none;
-    }
-
-    #yearbook-direct-link .mobile-pdf-button:hover {
-      background: #ffca2c;
     }
 
     #yearbook-direct-link a:focus-visible {
@@ -81,19 +82,16 @@
       padding: 12px 16px;
       border-radius: 6px;
       background: #f2f3fa;
-      color: #2d3a90;
       font-size: 0.95rem;
       line-height: 1.6;
     }
 
-    /* Desktop search instructions */
     #yearbook-search-help {
       display: none;
       margin: 12px;
       padding: 12px 16px;
       border-radius: 6px;
       background: #f2f3fa;
-      color: #2d3a90;
       text-align: center;
       font-size: 0.95rem;
       line-height: 1.6;
@@ -108,24 +106,13 @@
       font-size: 0.9em;
     }
 
-    /* PDF viewer */
-    #yearbook-viewer {
-      display: block;
-      width: 100%;
-      height: 85vh;
-      border: 0;
-    }
-
-    #yearbook-viewer[hidden] {
-      display: none;
-    }
-
-    /* Fallback when JavaScript is disabled */
+    #yearbook-loading,
     .yearbook-noscript {
       margin: 16px 12px;
-      padding: 12px 16px;
+      padding: 16px;
       border-radius: 6px;
       background: #f2f3fa;
+      color: #2d3a90;
       text-align: center;
       line-height: 1.6;
     }
@@ -134,7 +121,18 @@
       color: #2d3a90;
     }
 
-    /* Desktop layout */
+    #yearbook-viewer {
+      display: block;
+      width: 100%;
+      height: 85vh;
+      border: 0;
+    }
+
+    #yearbook-viewer[hidden],
+    #yearbook-loading[hidden] {
+      display: none;
+    }
+
     @media (min-width: 768px) {
       #yearbook-direct-link {
         display: none;
@@ -155,18 +153,11 @@
 
 <body>
   <nav id="yearbook-navigation" aria-label="Yearbook parts">
-    <!--
-      Part 1 must be saved as yearbook-1.html in the same folder.
-      If its filename differs, update the href below.
-    -->
     <a href="yearbook-1.html">← Previous part</a>
-
     <span>Part 2 of 4</span>
-
     <a href="yearbook-3.html">Next part →</a>
   </nav>
 
-  <!-- Mobile-only button and message -->
   <div id="yearbook-direct-link">
     <a
       class="mobile-pdf-button"
@@ -185,17 +176,22 @@
     </p>
   </div>
 
-  <!-- Desktop-only search instructions -->
   <p id="yearbook-search-help">
     Search this part: click inside the PDF, then press
     <kbd>Ctrl</kbd> + <kbd>F</kbd> (Windows) or
     <kbd>Command</kbd> + <kbd>F</kbd> (Mac).
   </p>
 
-  <!--
-    Leave the src attribute off this iframe.
-    The script assigns the PDF URL only on desktop-sized screens.
-  -->
+  <p
+    id="yearbook-loading"
+    role="status"
+    aria-live="polite"
+    hidden
+  >
+    Please wait while the yearbook PDF loads…
+  </p>
+
+  <!-- Keep src off this iframe to avoid loading the PDF on mobile. -->
   <iframe
     id="yearbook-viewer"
     data-src="assets/pdfs/yearbook-part-02.pdf"
@@ -218,27 +214,86 @@
     (() => {
       "use strict";
 
-      const pdfViewer = document.getElementById("yearbook-viewer");
-      const desktopScreen = window.matchMedia("(min-width: 768px)");
+      const viewer = document.getElementById("yearbook-viewer");
+      const loading = document.getElementById("yearbook-loading");
+      const desktop = window.matchMedia("(min-width: 768px)");
 
-      function updatePdfViewer() {
-        if (desktopScreen.matches) {
-          if (!pdfViewer.hasAttribute("src")) {
-            pdfViewer.src = pdfViewer.dataset.src;
-          }
+      const minimumDisplayTime = 1500;
 
-          pdfViewer.hidden = false;
-        } else {
-          pdfViewer.hidden = true;
+      let loadingStartedAt = 0;
+      let hideTimer = null;
+      let startTimer = null;
+      let loadActive = false;
 
-          if (pdfViewer.hasAttribute("src")) {
-            pdfViewer.removeAttribute("src");
-          }
-        }
+      function clearTimers() {
+        clearTimeout(hideTimer);
+        clearTimeout(startTimer);
+        hideTimer = null;
+        startTimer = null;
       }
 
-      updatePdfViewer();
-      desktopScreen.addEventListener("change", updatePdfViewer);
+      viewer.addEventListener("load", () => {
+        if (
+          !loadActive ||
+          !desktop.matches ||
+          !viewer.hasAttribute("src")
+        ) {
+          return;
+        }
+
+        const elapsed = performance.now() - loadingStartedAt;
+        const remaining = Math.max(0, minimumDisplayTime - elapsed);
+
+        clearTimeout(hideTimer);
+
+        hideTimer = setTimeout(() => {
+          hideTimer = null;
+
+          if (loadActive && desktop.matches) {
+            loading.hidden = true;
+            loadActive = false;
+          }
+        }, remaining);
+      });
+
+      function updateViewer() {
+        if (!desktop.matches) {
+          clearTimers();
+          loadActive = false;
+          loading.hidden = true;
+          viewer.hidden = true;
+
+          if (viewer.hasAttribute("src")) {
+            viewer.removeAttribute("src");
+          }
+
+          return;
+        }
+
+        if (viewer.hasAttribute("src") || startTimer !== null) {
+          return;
+        }
+
+        clearTimers();
+        loading.hidden = false;
+        viewer.hidden = true;
+        loadingStartedAt = performance.now();
+
+        startTimer = setTimeout(() => {
+          startTimer = null;
+
+          if (!desktop.matches) {
+            return;
+          }
+
+          loadActive = true;
+          viewer.src = viewer.dataset.src;
+          viewer.hidden = false;
+        }, 100);
+      }
+
+      updateViewer();
+      desktop.addEventListener("change", updateViewer);
     })();
   </script>
 </body>
