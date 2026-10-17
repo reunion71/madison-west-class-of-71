@@ -71,6 +71,11 @@
       text-decoration: none;
     }
 
+    .mobile-pdf-button[aria-disabled="true"] {
+      opacity: 0.7;
+      cursor: wait;
+    }
+
     #yearbook-direct-link a:focus-visible {
       outline: 3px solid #2d3a90;
       outline-offset: 3px;
@@ -112,7 +117,6 @@
       padding: 16px;
       border-radius: 6px;
       background: #f2f3fa;
-      color: #2d3a90;
       text-align: center;
       line-height: 1.6;
     }
@@ -129,7 +133,8 @@
     }
 
     #yearbook-viewer[hidden],
-    #yearbook-loading[hidden] {
+    #yearbook-loading[hidden],
+    #mobile-loading-message[hidden] {
       display: none;
     }
 
@@ -162,17 +167,25 @@
     <a
       class="mobile-pdf-button"
       href="assets/pdfs/yearbook-part-04.pdf"
-      target="_blank"
-      rel="noopener"
-      aria-label="Mobile Devices: open Part 4 PDF in a new tab"
+      aria-label="Mobile Devices: open Part 4 PDF"
     >
       Mobile Devices
     </a>
 
     <p>
       On a phone or tablet, tap “Mobile Devices” to open
-      this part of the yearbook in a new tab.
-      The PDF will not load automatically on this page.
+      this part of the yearbook.
+      Use your browser’s Back control to return.
+      The PDF will not load until you tap the button.
+    </p>
+
+    <p
+      id="mobile-loading-message"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      Please wait—opening the yearbook PDF…
     </p>
   </div>
 
@@ -191,7 +204,7 @@
     Please wait while the yearbook PDF loads…
   </p>
 
-  <!-- Keep src off this iframe to avoid loading the PDF on mobile. -->
+  <!-- Leave src off this iframe to prevent automatic mobile loading. -->
   <iframe
     id="yearbook-viewer"
     data-src="assets/pdfs/yearbook-part-04.pdf"
@@ -202,11 +215,9 @@
   <noscript>
     <p class="yearbook-noscript">
       To view the yearbook without JavaScript,
-      <a
-        href="assets/pdfs/yearbook-part-04.pdf"
-        target="_blank"
-        rel="noopener"
-      >open Part 4 of the PDF in a new tab</a>.
+      <a href="assets/pdfs/yearbook-part-04.pdf">
+        open Part 4 of the PDF
+      </a>.
     </p>
   </noscript>
 
@@ -217,7 +228,6 @@
       const viewer = document.getElementById("yearbook-viewer");
       const loading = document.getElementById("yearbook-loading");
       const desktop = window.matchMedia("(min-width: 768px)");
-
       const minimumDisplayTime = 1500;
 
       let loadingStartedAt = 0;
@@ -294,6 +304,54 @@
 
       updateViewer();
       desktop.addEventListener("change", updateViewer);
+    })();
+  </script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const mobileLink = document.querySelector(".mobile-pdf-button");
+      const mobileMessage = document.getElementById(
+        "mobile-loading-message"
+      );
+
+      let openingPdf = false;
+      let navigationTimer = null;
+
+      mobileLink.addEventListener("click", (event) => {
+        if (
+          event.button !== 0 ||
+          event.ctrlKey ||
+          event.metaKey ||
+          event.shiftKey ||
+          event.altKey
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+
+        if (openingPdf) {
+          return;
+        }
+
+        openingPdf = true;
+        mobileMessage.hidden = false;
+        mobileLink.setAttribute("aria-disabled", "true");
+
+        navigationTimer = setTimeout(() => {
+          window.location.assign(mobileLink.href);
+        }, 750);
+      });
+
+      window.addEventListener("pageshow", () => {
+        clearTimeout(navigationTimer);
+        navigationTimer = null;
+        openingPdf = false;
+        mobileMessage.hidden = true;
+        mobileLink.removeAttribute("aria-disabled");
+      });
     })();
   </script>
 </body>
