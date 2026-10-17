@@ -31,6 +31,7 @@
     }
 
     #yearbook-navigation span[aria-disabled="true"] {
+      color: #fff;
       font-weight: 400;
       opacity: 0.65;
     }
@@ -54,12 +55,13 @@
       outline-offset: 3px;
     }
 
+    /* Mobile button and information */
     #yearbook-direct-link {
-      margin: 20px 12px;
+      margin: 24px 12px;
       text-align: center;
     }
 
-    #yearbook-direct-link a {
+    #yearbook-direct-link .mobile-pdf-button {
       display: inline-block;
       padding: 12px 20px;
       border-radius: 6px;
@@ -70,7 +72,7 @@
       text-decoration: none;
     }
 
-    #yearbook-direct-link a:hover {
+    #yearbook-direct-link .mobile-pdf-button:hover {
       background: #ffca2c;
     }
 
@@ -80,19 +82,19 @@
     }
 
     #yearbook-direct-link p {
-      box-sizing: border-box;
-      max-width: 600px;
-      margin: 14px auto 0;
-      padding: 14px 18px;
-      border: 1px solid #2d3a90;
+      max-width: 500px;
+      margin: 16px auto 0;
+      padding: 12px 16px;
       border-radius: 6px;
       background: #f2f3fa;
       color: #2d3a90;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       line-height: 1.6;
     }
 
+    /* Desktop search instructions */
     #yearbook-search-help {
+      display: none;
       margin: 12px;
       padding: 12px 16px;
       border-radius: 6px;
@@ -112,6 +114,7 @@
       font-size: 0.9em;
     }
 
+    /* PDF viewer */
     #yearbook-viewer {
       display: block;
       width: 100%;
@@ -119,21 +122,39 @@
       border: 0;
     }
 
+    #yearbook-viewer[hidden] {
+      display: none;
+    }
+
+    .yearbook-noscript {
+      margin: 16px 12px;
+      padding: 12px 16px;
+      border-radius: 6px;
+      background: #f2f3fa;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .yearbook-noscript a {
+      color: #2d3a90;
+    }
+
+    /* Desktop layout */
+    @media (min-width: 768px) {
+      #yearbook-direct-link {
+        display: none;
+      }
+
+      #yearbook-search-help {
+        display: block;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       #yearbook-navigation a {
         transition: none;
       }
     }
-	@media (min-width: 768px) {
-  #yearbook-direct-link {
-    text-align: left;
-  }
-
-  #yearbook-direct-link p {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
   </style>
 </head>
 
@@ -144,31 +165,80 @@
     <a href="yearbook-2.html">Next part →</a>
   </nav>
 
+  <!-- Mobile-only button and message -->
   <div id="yearbook-direct-link">
     <a
+      class="mobile-pdf-button"
       href="assets/pdfs/yearbook-part-01.pdf"
       target="_blank"
       rel="noopener"
+      aria-label="Mobile Devices: open Part 1 PDF in a new tab"
     >
       Mobile Devices
     </a>
 
     <p>
-      On a phone or tablet, use the button above to open the PDF.
-      Your device may open it in a PDF viewer or download it.
+      On a phone or tablet, tap “Mobile Devices” to open
+      this part of the yearbook in a new tab.
+      The PDF will not load automatically on this page.
     </p>
   </div>
 
+  <!-- Desktop-only search instructions -->
   <p id="yearbook-search-help">
-    Search this part on a computer: click inside the PDF, then press
+    Search this part: click inside the PDF, then press
     <kbd>Ctrl</kbd> + <kbd>F</kbd> (Windows) or
     <kbd>Command</kbd> + <kbd>F</kbd> (Mac).
   </p>
 
+  <!--
+    No src attribute here.
+    The PDF URL is assigned only on desktop-sized screens.
+  -->
   <iframe
     id="yearbook-viewer"
-    src="assets/pdfs/yearbook-part-01.pdf"
+    data-src="assets/pdfs/yearbook-part-01.pdf"
     title="1971 Yearbook — Part 1"
+    hidden
   ></iframe>
+
+  <noscript>
+    <p class="yearbook-noscript">
+      To view the yearbook without JavaScript,
+      <a
+        href="assets/pdfs/yearbook-part-01.pdf"
+        target="_blank"
+        rel="noopener"
+      >open Part 1 of the PDF in a new tab</a>.
+    </p>
+  </noscript>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const pdfViewer = document.getElementById("yearbook-viewer");
+      const desktopScreen = window.matchMedia("(min-width: 768px)");
+
+      function updatePdfViewer() {
+        if (desktopScreen.matches) {
+          if (!pdfViewer.hasAttribute("src")) {
+            pdfViewer.src = pdfViewer.dataset.src;
+          }
+
+          pdfViewer.hidden = false;
+        } else {
+          pdfViewer.hidden = true;
+
+          if (pdfViewer.hasAttribute("src")) {
+            pdfViewer.removeAttribute("src");
+          }
+        }
+      }
+
+      updatePdfViewer();
+      desktopScreen.addEventListener("change", updatePdfViewer);
+    })();
+  </script>
 </body>
 </html>

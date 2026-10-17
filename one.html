@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>1971 Yearbook — Part 1</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #f4f6f8;
+      color: #243447;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 24px 16px;
+      background-color: #174a7e;
+      color: #fff;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+    }
+
+    header p {
+      margin: 6px 0 0;
+    }
+
+    main {
+      width: min(1200px, 100%);
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    .yearbook-navigation {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .yearbook-navigation a {
+      display: inline-block;
+      padding: 9px 16px;
+      border: 1px solid #174a7e;
+      border-radius: 6px;
+      background-color: #fff;
+      color: #174a7e;
+      text-decoration: none;
+    }
+
+    .yearbook-navigation a[aria-current="page"],
+    .yearbook-navigation a:hover {
+      background-color: #174a7e;
+      color: #fff;
+    }
+
+    a:focus-visible {
+      outline: 3px solid #d68a00;
+      outline-offset: 4px;
+    }
+
+    /* Mobile information is visible by default. */
+    #yearbook-direct-link {
+      margin: 24px 0;
+      text-align: center;
+    }
+
+    .mobile-pdf-button {
+      display: inline-block;
+      padding: 14px 24px;
+      border-radius: 6px;
+      background-color: #174a7e;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .mobile-pdf-button:hover {
+      background-color: #10375e;
+    }
+
+    #yearbook-direct-link p {
+      max-width: 500px;
+      margin: 16px auto 0;
+      padding: 16px;
+      border: 1px solid #cbd5df;
+      border-radius: 6px;
+      background-color: #fff;
+      text-align: left;
+    }
+
+    /* Desktop content stays hidden on smaller screens. */
+    #yearbook-search-help {
+      display: none;
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      border: 1px solid #cbd5df;
+      border-radius: 6px;
+      background-color: #fff;
+    }
+
+    #yearbook-search-help p {
+      margin: 0;
+    }
+
+    #yearbook-viewer {
+      display: block;
+      width: 100%;
+      height: 85vh;
+      min-height: 500px;
+      border: 1px solid #cbd5df;
+      border-radius: 6px;
+      background-color: #fff;
+    }
+
+    #yearbook-viewer[hidden] {
+      display: none;
+    }
+
+    .no-script-message {
+      padding: 16px;
+      border: 1px solid #cbd5df;
+      border-radius: 6px;
+      background-color: #fff;
+      text-align: center;
+    }
+
+    footer {
+      padding: 20px 16px;
+      color: #526171;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    /* Desktop layout */
+    @media (min-width: 768px) {
+      #yearbook-direct-link {
+        display: none;
+      }
+
+      #yearbook-search-help {
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>1971 Yearbook</h1>
+    <p>Part 1 of 4</p>
+  </header>
+
+  <main>
+    <nav
+      class="yearbook-navigation"
+      aria-label="Yearbook parts"
+    >
+      <a href="yearbook-1.html" aria-current="page">Part 1</a>
+      <a href="yearbook-2.html">Part 2</a>
+      <a href="yearbook-3.html">Part 3</a>
+      <a href="yearbook-4.html">Part 4</a>
+    </nav>
+
+    <!--
+      Mobile visitors open the PDF only when they select this link.
+      The embedded viewer has no PDF src on mobile.
+    -->
+    <section
+      id="yearbook-direct-link"
+      aria-label="Open the yearbook on a mobile device"
+    >
+      <a
+        class="mobile-pdf-button"
+        href="assets/pdfs/yearbook-part-01.pdf"
+        target="_blank"
+        rel="noopener"
+      >
+        Mobile Devices
+        <span class="new-tab-note">— Open PDF</span>
+      </a>
+
+      <p>
+        On a phone or tablet, tap “Mobile Devices” to open
+        Part 1 of the yearbook in a new tab. The PDF will
+        not load on this page automatically.
+      </p>
+    </section>
+
+    <section
+      id="yearbook-search-help"
+      aria-label="Yearbook search instructions"
+    >
+      <p>
+        To search the yearbook, click inside the PDF viewer
+        and press Ctrl + F on Windows or Command + F on Mac.
+        If the viewer does not display,
+        <a
+          href="assets/pdfs/yearbook-part-01.pdf"
+          target="_blank"
+          rel="noopener"
+        >open the PDF in a new tab</a>.
+      </p>
+    </section>
+
+    <!--
+      Do not add a src attribute here.
+      JavaScript assigns the PDF URL only on desktop-sized screens.
+    -->
+    <iframe
+      id="yearbook-viewer"
+      data-src="assets/pdfs/yearbook-part-01.pdf"
+      title="1971 Yearbook — Part 1"
+      hidden
+    ></iframe>
+
+    <noscript>
+      <p class="no-script-message">
+        The embedded viewer requires JavaScript.
+        <a
+          href="assets/pdfs/yearbook-part-01.pdf"
+          target="_blank"
+          rel="noopener"
+        >Open Part 1 of the yearbook PDF in a new tab</a>.
+      </p>
+    </noscript>
+  </main>
+
+  <footer>
+    1971 Yearbook — Part 1 of 4
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const pdfViewer = document.getElementById("yearbook-viewer");
+      const desktopScreen = window.matchMedia("(min-width:
