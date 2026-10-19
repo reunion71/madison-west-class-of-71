@@ -35,14 +35,15 @@
       opacity: 0.65;
     }
 
-    #yearbook-navigation a {
+    #yearbook-navigation a,
+    .mobile-pdf-button {
+      display: inline-block;
       padding: 9px 16px;
       border-radius: 6px;
       background: #ffc107;
       color: #2d3a90;
       font-weight: 700;
       text-decoration: none;
-      transition: background-color 150ms ease;
     }
 
     #yearbook-navigation a:hover,
@@ -61,14 +62,8 @@
     }
 
     .mobile-pdf-button {
-      display: inline-block;
       padding: 12px 20px;
-      border-radius: 6px;
-      background: #ffc107;
-      color: #2d3a90;
       font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
     }
 
     .mobile-pdf-button[aria-disabled="true"] {
@@ -87,7 +82,6 @@
       padding: 12px 16px;
       border-radius: 6px;
       background: #f2f3fa;
-      font-size: 0.95rem;
       line-height: 1.6;
     }
 
@@ -99,10 +93,16 @@
       background: #f2f3fa;
       text-align: center;
       font-size: 0.95rem;
-      line-height: 1.6;
+      line-height: 1.8;
     }
 
-    #yearbook-search-help kbd {
+    #yearbook-search-help a,
+    .yearbook-noscript a {
+      color: #2d3a90;
+      text-underline-offset: 3px;
+    }
+
+    kbd {
       padding: 2px 5px;
       border-radius: 4px;
       background: #2d3a90;
@@ -121,10 +121,6 @@
       line-height: 1.6;
     }
 
-    .yearbook-noscript a {
-      color: #2d3a90;
-    }
-
     #yearbook-viewer {
       display: block;
       width: 100%;
@@ -132,25 +128,18 @@
       border: 0;
     }
 
-    #yearbook-viewer[hidden],
-    #yearbook-loading[hidden],
-    #mobile-loading-message[hidden] {
-      display: none;
+    [hidden] {
+      display: none !important;
     }
 
-    @media (min-width: 768px) {
+    /* Desktop viewer: wide screens without a coarse pointer. */
+    @media (min-width: 768px) and (not (any-pointer: coarse)) {
       #yearbook-direct-link {
         display: none;
       }
 
       #yearbook-search-help {
         display: block;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      #yearbook-navigation a {
-        transition: none;
       }
     }
   </style>
@@ -173,53 +162,33 @@
     </a>
 
     <p>
-      On a phone or tablet, tap “Mobile Devices” to open
-      this part of the yearbook.
-      Use your browser’s Back control to return.
+      Tap “Mobile Devices” to open this part of the yearbook.
       The PDF will not load until you tap the button.
+      Use your browser’s Back control to return.
     </p>
 
-    <p
-      id="mobile-loading-message"
-      role="status"
-      aria-live="polite"
-      hidden
-    >
+    <p id="mobile-loading-message" role="status" hidden>
       Please wait—opening the yearbook PDF…
     </p>
   </div>
 
-  		<p id="yearbook-search-help">
-  Click <span aria-hidden="true">☰</span> (sidebar button)
-  in the PDF viewer’s upper-left corner to show or hide
-  page thumbnails. Click a thumbnail to go to that page.
+  <p id="yearbook-search-help">
+    Click <span aria-hidden="true">☰</span> (sidebar button)
+    in the PDF viewer’s upper-left corner to show or hide
+    page thumbnails. Click a thumbnail to go to that page.
+    <br>
+    Search this part: click inside the PDF, then press
+    <kbd>Ctrl</kbd> + <kbd>F</kbd> (Windows) or
+    <kbd>Command</kbd> + <kbd>F</kbd> (Mac).
+    <br>
+    <a href="assets/pdfs/yearbook-part-03.pdf">View just the PDF</a>
+  </p>
 
-  <br>
-
-  Search this part: click inside the PDF, then press
-  <kbd>Ctrl</kbd> + <kbd>F</kbd> (Windows) or
-  <kbd>Command</kbd> + <kbd>F</kbd> (Mac).
-
-  <br>
-
-  <a
-    href="assets/pdfs/yearbook-part-03.pdf"
-    style="color: #2d3a90; text-underline-offset: 3px;"
-  >
-    View just the PDF
-  </a>
-</p>
-
-  <p
-    id="yearbook-loading"
-    role="status"
-    aria-live="polite"
-    hidden
-  >
+  <p id="yearbook-loading" role="status" hidden>
     Please wait while the yearbook PDF loads…
   </p>
 
-  <!-- Leave src off this iframe to prevent automatic mobile loading. -->
+  <!-- Do not add src: JavaScript decides whether to load the PDF. -->
   <iframe
     id="yearbook-viewer"
     data-src="assets/pdfs/yearbook-part-03.pdf"
@@ -229,9 +198,9 @@
 
   <noscript>
     <p class="yearbook-noscript">
-      To view the yearbook without JavaScript,
+      JavaScript is disabled.
       <a href="assets/pdfs/yearbook-part-03.pdf">
-        open Part 3 of the PDF
+        Open Part 3 of the PDF
       </a>.
     </p>
   </noscript>
@@ -242,15 +211,23 @@
 
       const viewer = document.getElementById("yearbook-viewer");
       const loading = document.getElementById("yearbook-loading");
-      const desktop = window.matchMedia("(min-width: 768px)");
+      const mobileLink = document.querySelector(".mobile-pdf-button");
+      const mobileMessage = document.getElementById("mobile-loading-message");
+
+      const desktop = window.matchMedia(
+        "(min-width: 768px) and (not (any-pointer: coarse))"
+      );
+
       const minimumDisplayTime = 1500;
 
       let loadingStartedAt = 0;
       let hideTimer = null;
       let startTimer = null;
       let loadActive = false;
+      let navigationTimer = null;
+      let openingPdf = false;
 
-      function clearTimers() {
+      function clearViewerTimers() {
         clearTimeout(hideTimer);
         clearTimeout(startTimer);
         hideTimer = null;
@@ -258,11 +235,7 @@
       }
 
       viewer.addEventListener("load", () => {
-        if (
-          !loadActive ||
-          !desktop.matches ||
-          !viewer.hasAttribute("src")
-        ) {
+        if (!loadActive || !desktop.matches || !viewer.hasAttribute("src")) {
           return;
         }
 
@@ -283,7 +256,7 @@
 
       function updateViewer() {
         if (!desktop.matches) {
-          clearTimers();
+          clearViewerTimers();
           loadActive = false;
           loading.hidden = true;
           viewer.hidden = true;
@@ -299,7 +272,7 @@
           return;
         }
 
-        clearTimers();
+        clearViewerTimers();
         loading.hidden = false;
         viewer.hidden = true;
         loadingStartedAt = performance.now();
@@ -316,23 +289,6 @@
           viewer.hidden = false;
         }, 100);
       }
-
-      updateViewer();
-      desktop.addEventListener("change", updateViewer);
-    })();
-  </script>
-
-  <script>
-    (() => {
-      "use strict";
-
-      const mobileLink = document.querySelector(".mobile-pdf-button");
-      const mobileMessage = document.getElementById(
-        "mobile-loading-message"
-      );
-
-      let openingPdf = false;
-      let navigationTimer = null;
 
       mobileLink.addEventListener("click", (event) => {
         if (
@@ -367,6 +323,9 @@
         mobileMessage.hidden = true;
         mobileLink.removeAttribute("aria-disabled");
       });
+
+      updateViewer();
+      desktop.addEventListener("change", updateViewer);
     })();
   </script>
 </body>
