@@ -37,7 +37,6 @@
     <link rel="stylesheet" href="assets/css/SCROLL-TO-TOP-CSA.css">
     <link rel="stylesheet" href="assets/css/Scroll-To-Top.css">
     <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="assets/css/yearbook.css">
 <title>Class of 71 Reunion</title>
 </head>
 
@@ -69,12 +68,36 @@
                 </div><!-- End: grow parent -->
             </div>
         </div><!-- End: color band --><!-- Start: div hats -->
-        <div style="height: 70px;background: #2d3a90;border-color: rgba(45,58,144,0);width: 75%;"><img src="assets/img/Home/Home_West71_Grad_web_799x51.jpg" style="width: 100%;height: 100%;object-fit: cover;"></div><!-- End: div hats --><section
+        <div style="height: 70px;background: #2d3a90;border-color: rgba(45,58,144,0);width: 75%;"><img src="assets/img/Home/Home_West71_Grad_web_799x51.jpg" style="width: 100%;height: 100%;object-fit: cover;"></div><!-- End: div hats --><style>
+   /* Subtle, recognizable archive links */
+  #digital-archive a {
+    color: #2d3a90;
+    font-weight: 400;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+  }
+
+  #digital-archive a:hover {
+    color: #17215c;
+  }
+
+  /* Visible keyboard focus */
+  #digital-archive a:focus-visible,
+  #yearbook-sections a:focus-visible {
+    outline: 2px solid #2d3a90;
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+</style>
+
+<section
   id="yearbook-sections"
-  class="bg-white py-5 my-4"
+  class="bg-white pt-3 my-4"
   aria-labelledby="yearbook-heading"
 >
-  <div class="container py-4">
+  <div class="container pt-2">
 
     <!-- Heading and introduction -->
     <div class="text-center mb-5">
@@ -101,8 +124,6 @@
         from Madison, Wisconsin.
         Familiar faces, shared memories, and a look back
         at our senior year.
-        <br>
-        Select one of four parts to begin.
       </p>
     </div>
 
@@ -116,57 +137,73 @@
       </h3>
     </div>
 
-    <!-- Yearbook links -->
+    <!-- Yearbook link with equal top and bottom spacing -->
     <nav
-      class="d-flex flex-wrap justify-content-center gap-4 pt-5"
-      aria-label="1971 Madison West High School yearbook parts"
+      class="d-flex justify-content-center py-5"
+      aria-label="1971 Madison West High School yearbook"
     >
       <a
         class="btn btn-warning fw-bold rounded-3 px-4 py-3"
         style="color: #2d3a90;"
-        href="yearbook-1.html"
+        href="https://madisonwesths.historyarchives.online/viewer?i=t&amp;d=01011971-12311971&amp;fn=the_madison_west_high_school_yearbooks_usa_wisconsin_madison_19710101_english_1&amp;df=1&amp;dt=10&amp;cid=3195&amp;t=43999"
       >
-        Yearbook Part 1
-      </a>
-
-      <a
-        class="btn btn-warning fw-bold rounded-3 px-4 py-3"
-        style="color: #2d3a90;"
-        href="yearbook-2.html"
-      >
-        Yearbook Part 2
-      </a>
-
-      <a
-        class="btn btn-warning fw-bold rounded-3 px-4 py-3"
-        style="color: #2d3a90;"
-        href="yearbook-3.html"
-      >
-        Yearbook Part 3
-      </a>
-
-      <a
-        class="btn btn-warning fw-bold rounded-3 px-4 py-3"
-        style="color: #2d3a90;"
-        href="yearbook-4.html"
-      >
-        Yearbook Part 4
+        Yearbook
       </a>
     </nav>
 
-    <!-- Subtle name-range notes -->
-    <div class="small text-secondary text-center mt-3">
-      <p class="mb-1">
-        Part 3 contains names A thru Paulson
+  </div>
+</section>
+
+<!-- Digital archive information and support -->
+<section
+  id="digital-archive"
+  class="bg-light py-5 my-4"
+  aria-labelledby="archive-heading"
+>
+  <div class="container">
+    <h2
+      id="archive-heading"
+      class="h3 fw-bold mb-4"
+      style="color: #2d3a90;"
+    >
+      Support the West Digital Archive
+    </h2>
+
+    <div class="lh-lg">
+      <p>
+        West has been working on building a digital archive of its
+        history. It is still in progress, but you can check it out at
+        <a href="http://bit.ly/westdigitalarchives">bit.ly/westdigitalarchives</a>.
+      </p>
+
+      <p>
+        If you have enjoyed or benefitted from our digital archive,
+        we would love your help!
+      </p>
+
+      <p>
+        Do you have West memorabilia or artifacts that might be a
+        good addition to our archive? Please reach out to see if we
+        could use your donation! We are especially in need of
+        yearbooks from before 1970. We are also happy to return
+        items after we are done digitizing if you prefer.
+      </p>
+
+      <p>
+        The digitization and hosting of our archive is not without
+        cost. Consider making a monetary gift so that we can
+        continue to digitize and upload more of our shared history.
       </p>
 
       <p class="mb-0">
-        Part 4 contains names Peckham thru Z
+        For questions about donating materials or making a monetary
+        gift, please visit the
+        <a href="https://madisonwesths.historyarchives.online/contact">Madison West High School Digital Archive contact page</a>.
       </p>
     </div>
-
   </div>
-</section><!-- Start: footer -->
+</section>
+<!-- Start: footer -->
         <div style="background: #a46767;margin: 0px;margin-top: 70px;"><!-- Start: color band -->
             <div class="row">
                 <div class="col"><!-- Start: grow parent -->
@@ -243,7 +280,7 @@
         </div>
     </div><!-- End: modal memoriam -->
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/./embed/js/smart-forms.min.js"></script>
+    <script src="assets/js/smart-forms.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
 </body>
 

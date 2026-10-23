@@ -209,7 +209,6 @@ body {
   overflow-y: scroll !important;
   /*min-height: 0;*/
   /*touch-action: pan-y;*/
-  /*-webkit-overflow-scrolling: touch;*/
 }
 
 custom-tsble-cell {
