@@ -116,6 +116,23 @@
     background-color: #e9ecf5;
     border-color: #2d3a90;
   }
+
+  /* Prevent the yearbook buttons from staying enlarged on touchscreens. */
+  @media (hover: none), (any-pointer: coarse) {
+    #yearbook-sections a.btn,
+    #yearbook-sections a.btn:hover,
+    #yearbook-sections a.btn:focus,
+    #yearbook-sections a.btn:active {
+      transform: none !important;
+      scale: none !important;
+      translate: none !important;
+      rotate: none !important;
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+
+
 </style>
 
 <section
